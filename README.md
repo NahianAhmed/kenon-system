@@ -1,2 +1,1 @@
 "# kenonApp" 
-# kenon-system

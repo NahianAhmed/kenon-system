@@ -1,5 +1,6 @@
 package com.kenon.kenonapp.Controller;
 
+import com.kenon.kenonapp.Helper.EmailHelper;
 import com.kenon.kenonapp.Helper.ExelHelper;
 import com.kenon.kenonapp.Model.EmployeeModel;
 import com.kenon.kenonapp.Model.PasswordModel;
@@ -10,6 +11,7 @@ import com.kenon.kenonapp.Repository.TemperatureRepository;
 import com.kenon.kenonapp.Service.ExelService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -105,7 +107,6 @@ public class AdminController {
                 .body(file);
     }
 
-
     @PostMapping("/admin/user-upload")
     public RedirectView uploadFile(@RequestParam("file") MultipartFile file,RedirectAttributes attributes) {
         String message = "";
@@ -115,7 +116,7 @@ public class AdminController {
                 exelService.savedata(file);
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
                 System.out.println(message);
-                attributes.addFlashAttribute("error","User Adder");
+                attributes.addFlashAttribute("error","ユーザーが正常に追加されました");
                 return new RedirectView("/admin/user-import-export");
             } catch (Exception e) {
                message =" Failed to upload";
@@ -193,11 +194,6 @@ public class AdminController {
         return "jsp/layout";
     }
 
-
-
-
-
-
     public void isAdmin(HttpServletRequest req, HttpServletResponse rep) throws IOException {
 
         if (req.getSession().getAttribute("user") == null) {
@@ -207,6 +203,17 @@ public class AdminController {
         } else if (!(req.getSession().getAttribute("user").equals("admin"))) {
             rep.sendRedirect("/");
         }
+    }
+    @Autowired
+    EmailHelper emailHelper;
+    // sec // min // hour // day
+    //0 0 10 ? * MON-FRI
+    //0 0 12 ? * MON-FRI
+    @Scheduled(cron="0 0 10 ? * MON-FRI")
+    @Scheduled(cron="0 0 12 ? * MON-FRI")
+    public void SentDailyMail(){
+         // System.out.println("Corn");
+          emailHelper.SentReminderMail();
     }
 
 
