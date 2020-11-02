@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 02, 2020 at 01:23 AM
+-- Generation Time: Nov 02, 2020 at 01:24 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.0
 
@@ -109,11 +109,11 @@ INSERT INTO `temparature_mesurement` (`id`, `更新日時`, `症状の有無`, `
 
 CREATE TABLE `temp_capture` (
   `id` bigint(20) NOT NULL,
-  `day1` varchar(255) DEFAULT NULL,
-  `day2` varchar(255) DEFAULT NULL,
-  `day3` varchar(255) DEFAULT NULL,
-  `day4` varchar(255) DEFAULT NULL,
-  `day5` varchar(255) DEFAULT NULL,
+  `day1` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `day2` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `day3` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `day4` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `day5` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `dept` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `kananame` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
@@ -162,7 +162,7 @@ ALTER TABLE `temparature_mesurement`
 -- AUTO_INCREMENT for table `temp_capture`
 --
 ALTER TABLE `temp_capture`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
