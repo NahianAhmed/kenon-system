@@ -17,6 +17,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
 
 
 @Controller
@@ -38,7 +39,15 @@ public class UserController {
             String name =  req.getSession().getAttribute("name").toString();
             String time="null";
            if (temperatureRepository.findLastUsedByUserID(id)!=null){
-            time = temperatureRepository.findLastUsedByUserID(id).toString();
+               Timestamp date = temperatureRepository.findLastUsedByUserID(id);
+               int year = date.getYear();
+               int month = date.getMonth();
+               int dates = date.getDate();
+               int hour = date.getHours();
+               int min = date.getMinutes();
+               int sec = date.getSeconds();
+               time = ((1900+year)+"年"+(month+1)+"月"+dates+"日"+hour+"時"+min+"分"+sec+" 秒");
+           // time = temperatureRepository.findLastUsedByUserID(id).toString();
         }
 
             modelMap.addAttribute("id",id);
@@ -73,7 +82,7 @@ public class UserController {
 
             if (pass.equals(repass)) {
 
-                if (pass.length()>=6){
+                if(pass.length()>=6){
 
                     passwordRepository.deleteById(id);
                     PasswordModel data = new PasswordModel();
@@ -105,8 +114,13 @@ public class UserController {
 
         @PostMapping("/user/save-temperature")
         public RedirectView SaveTemp(@ModelAttribute TemperatureModel temperatureModel,RedirectAttributes attributes){
-        temperatureRepository.save(temperatureModel);
-        attributes.addFlashAttribute("error","データが追加されます。");
+            if (temperatureModel.getTemperature()>=30 && temperatureModel.getTemperature()<=45){
+                temperatureRepository.save(temperatureModel);
+                attributes.addFlashAttribute("error","データが追加されます。");
+            }
+            else {
+                attributes.addFlashAttribute("error","体温は30度から45度の間でなければなりません。");
+            }
         return new RedirectView("/user");
         }
 

@@ -1,10 +1,13 @@
 package com.kenon.kenonapp.Service;
 
 import com.kenon.kenonapp.Helper.ExelHelper;
+import com.kenon.kenonapp.Helper.TempChaptureHelper;
 import com.kenon.kenonapp.Model.EmployeeModel;
 import com.kenon.kenonapp.Model.PasswordModel;
+import com.kenon.kenonapp.Model.TempCaptureModel;
 import com.kenon.kenonapp.Repository.EmployeeRepository;
 import com.kenon.kenonapp.Repository.PasswordRepository;
+import com.kenon.kenonapp.Repository.TempCaptureIRepo;
 import com.kenon.kenonapp.Repository.TemperatureRepository;
 import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
@@ -23,12 +26,20 @@ public class ExelService {
     PasswordRepository passwordRepository;
     @Autowired
     TemperatureRepository temperatureRepository;
+    @Autowired
+    TempCaptureIRepo tempCaptureIRepo;
     public ByteArrayInputStream load() {
         ByteArrayInputStream in = ExelHelper.ToExcel((List<EmployeeModel>) employeeRepository.findAll());
         return in;
     }
-    public void savedata(MultipartFile file) {
 
+    public ByteArrayInputStream loadTemp() {
+        ByteArrayInputStream in = TempChaptureHelper.ToExcel( (List<TempCaptureModel>) tempCaptureIRepo.findAll());
+        tempCaptureIRepo.deleteAll();
+        return in;
+    }
+
+    public void savedata(MultipartFile file) {
 
       try {
 

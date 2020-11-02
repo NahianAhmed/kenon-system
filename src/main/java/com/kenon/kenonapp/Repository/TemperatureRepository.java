@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -20,5 +21,10 @@ public interface TemperatureRepository extends CrudRepository<TemperatureModel,L
 
     @Query("select userId From TemperatureModel where Date(lastUsed)=?1")
     List EmailAddressOfCurrentDate(Date today);
+
+
+
+    @Query("From TemperatureModel where userId=?1 and Date(lastUsed)>=?2 and Date(lastUsed)<=?3")
+    List<TemperatureModel> TemperatureByDate(String userId,Date s,Date e);
 
 }

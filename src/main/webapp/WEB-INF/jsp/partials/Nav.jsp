@@ -30,7 +30,7 @@
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                 <li><a href="/admin">体調の入力</a></li>
                 <li><a href="/admin/user-import-export">ユーザの取り込み</a></li>
-                <li><a href="#">一覧の出力</a></li>
+                <li><a href="/admin/temperature-export">一覧の出力</a></li>
             </ul>
         </div>
     </div>

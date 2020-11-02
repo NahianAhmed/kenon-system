@@ -9,6 +9,7 @@
 
     <p style="color: red">${error}</p>
 
+
     <div class="form-group pt-3">
         <input type="text" class="form-control" name="lastUsed"
                value="${time}" disabled />
@@ -40,4 +41,9 @@
             style="margin-top: 25px">登録</button>
 
 </form>
-
+<div class="row">
+    <div class="col-4 offset-4" style="border:1px solid">
+        <p style="text-align:left">一連絡先一</p>
+        <p style="text-align:left">代表：TEL　026-228-6644</p>
+    </div>
+</div>
