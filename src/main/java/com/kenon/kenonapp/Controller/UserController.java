@@ -113,10 +113,11 @@ public class UserController {
         }
 
         @PostMapping("/user/save-temperature")
-        public RedirectView SaveTemp(@ModelAttribute TemperatureModel temperatureModel,RedirectAttributes attributes){
+        public RedirectView SaveTemp(@ModelAttribute TemperatureModel temperatureModel,RedirectAttributes attributes,HttpServletRequest req){
             if (temperatureModel.getTemperature()>=30 && temperatureModel.getTemperature()<=45){
                 temperatureRepository.save(temperatureModel);
                 attributes.addFlashAttribute("error","データが追加されます。");
+                req.getSession().setAttribute("alert","show");
             }
             else {
                 attributes.addFlashAttribute("error","体温は30度から45度の間でなければなりません。");

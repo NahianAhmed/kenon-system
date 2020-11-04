@@ -1,7 +1,7 @@
     <!-- Footer -->
 
-    </br>
 
+    <br>
 
         <footer class="page-footer font-small blue">
 

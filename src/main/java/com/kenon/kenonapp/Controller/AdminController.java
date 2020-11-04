@@ -26,9 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
 import java.io.IOException;
-import java.sql.Array;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -74,6 +72,23 @@ public class AdminController {
         modelMap.addAttribute("content","admin/index.jsp");
         return "jsp/layout";
     }
+
+
+    @PostMapping("/admin/save-temperature")
+    public RedirectView SaveTemp(@ModelAttribute TemperatureModel temperatureModel,RedirectAttributes attributes,HttpServletRequest req){
+        if (temperatureModel.getTemperature()>=30 && temperatureModel.getTemperature()<=45){
+            temperatureRepository.save(temperatureModel);
+            attributes.addFlashAttribute("error","データが追加されます。");
+            req.getSession().setAttribute("alert","show");
+        }
+        else {
+            attributes.addFlashAttribute("error","体温は30度から45度の間でなければなりません。");
+
+        }
+
+        return new RedirectView("/admin");
+    }
+
 
 
 
@@ -163,20 +178,6 @@ public class AdminController {
 
     }
 
-    @PostMapping("/admin/save-temperature")
-    public RedirectView SaveTemp(@ModelAttribute TemperatureModel temperatureModel,RedirectAttributes attributes){
-        if (temperatureModel.getTemperature()>=30 && temperatureModel.getTemperature()<=45){
-            temperatureRepository.save(temperatureModel);
-            attributes.addFlashAttribute("error","データが追加されます。");
-           // attributes.addFlashAttribute("sweetAlart","show");
-        }
-        else {
-            attributes.addFlashAttribute("error","体温は30度から45度の間でなければなりません。");
-
-        }
-
-        return new RedirectView("/admin");
-    }
 
     @GetMapping("/admin/user-import-export")
     public String ExcelImportExport(ModelMap modelMap,HttpServletRequest request,HttpServletResponse response) throws IOException {

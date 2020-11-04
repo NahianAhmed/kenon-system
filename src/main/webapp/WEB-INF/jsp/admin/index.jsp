@@ -2,11 +2,27 @@
          pageEncoding="UTF-8"%>
 
 
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js">
+</script>
+
+    <%if(session.getAttribute("alert")!=null ) {%>
+    <script>
+        swal("データが追加されます");
+    </script>
+    <%}%>
+
+    <%
+        session.removeAttribute("alert");
+    %>
+
+
+
 <form method="post" action="/admin/save-temperature" class="pl-3 m-4" style="font-size: 13px">
     <div class="pt-3">
         <h4>体調の入力</h4>
     </div>
-
     <p style="color: red">${error}</p>
 
 
@@ -39,8 +55,9 @@
 
     <button type="submit" class="btn btn-primary form-control"
             style="margin-top: 25px">登録</button>
-
+    <br>
 </form>
+
 <div class="row">
     <div class="col-4 offset-4" style="border:1px solid">
         <p style="text-align:left">一連絡先一</p>
