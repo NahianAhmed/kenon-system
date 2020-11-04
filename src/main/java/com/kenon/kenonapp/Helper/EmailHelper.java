@@ -29,9 +29,18 @@ public class EmailHelper {
         simpleMailMessage.setTo(email);
         simpleMailMessage.setSubject("パスワード再設定のメール");
         simpleMailMessage.setText(
-                name + "さん" + "\n\n"
-                        + "リンクをたどってパスワードをリセットしてください。\n http://localhost:8080/verify-link/"+id
-                      +"/"+ token + "\nリンクをクリックすると、パスワードをリセットできます。"
+                name + "様" + "\n\n"
+                        + "パスワードをリセットするには次のリンクをクリックしてください。\n http://localhost:8080/verify-link/"+id
+                      +"/"+ token + "\n(このURLは1回の変更のみ有効です。)"+"\n\n"+
+                        "このメールに心当たりがない場合、ほかの方がパスワードをリセットする際に誤ってメールアドレスを入力した可能性があります。\n"+
+                        "リクエストした覚えがない場合は、このメールは破棄してください。" + "\n\n"+
+                        "================================================\n"+
+                        "本メールは送信専用メールです。返信はできません。"+"\n"+
+                        "問い合わせは下記にお願いします。"+"\n\n"+
+                        " -本件問い合わせ先-：\n "+
+                        "tel    :             026-228-6644  \n"+
+                        "E-mail :        miyazawagkeiken.local \n"+
+                        "================================================"
         );
         javaMailSender.send(simpleMailMessage);
     }
@@ -68,8 +77,15 @@ public class EmailHelper {
         simpleMailMessage.setSubject("リマインダーメール");
         simpleMailMessage.setText(
                          "\n\n"
-                        + "今日、体温を入力しませんでした。今日は体温を入力してください。 \n http://localhost:8080/"
-                        + "\nリンクをクリックして行うことができます。"
+                        + "本日の体温及び風邪の症状等が未入力ですので、入力してください。 \n http://localhost:8080/"
+                        + "\n                                   ケイケンシステム管理部 \n"+
+                         "============================================================\n"+
+                                 "本メールは送信専用メールです。返信はできません。\n"+
+                                 "問い合わせは下記にお願いします。\n\n"+
+                                 "tel    :             026-228-6644  \n"+
+                                 "E-mail :        miyazawagkeiken.local \n"+
+                         "=============================================================\n"
+
         );
         javaMailSender.send(simpleMailMessage);
     }
