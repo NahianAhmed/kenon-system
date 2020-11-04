@@ -25,6 +25,9 @@ public interface EmployeeRepository extends JpaRepository<EmployeeModel,String> 
   @Query("SELECT DISTINCT department from EmployeeModel")
    List AllDepartment();
 
+  @Query("from EmployeeModel  where department=?1")
+  List employeeByDepatment(String dept);
+
 
 
 

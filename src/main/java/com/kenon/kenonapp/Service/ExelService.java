@@ -35,7 +35,7 @@ public class ExelService {
 
     public ByteArrayInputStream loadTemp() {
         ByteArrayInputStream in = TempChaptureHelper.ToExcel( (List<TempCaptureModel>) tempCaptureIRepo.findAll());
-        tempCaptureIRepo.deleteAll();
+       tempCaptureIRepo.deleteAll();
         return in;
     }
 

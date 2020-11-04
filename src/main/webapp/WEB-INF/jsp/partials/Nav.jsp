@@ -21,18 +21,19 @@
 
     <div class="d-inline-block p-3">
 
-        <div class="dropdown">
-            <button style="background-color: transparent"
-                    class="btn  dropdown-toggle" id="dropdownMenu1"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                メニュー <span class="caret"></span>
+
+        <div class="btn-group dropright">
+            <button class="btn btn-default btn-lg dropdown-toggle" type="button"  data-toggle="dropdown" data-hover="dropdown">
+              <span class="text-primary">メニュー</span>
             </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href="/admin">体調の入力</a></li>
-                <li><a href="/admin/user-import-export">ユーザの取り込み</a></li>
-                <li><a href="/admin/temperature-export">一覧の出力</a></li>
-            </ul>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/admin"> 体調の入力</a>
+                <a class="dropdown-item"href="/admin/user-import-export"> ユーザの取り込み</a>
+                <a class="dropdown-item" href="/admin/temperature-export"> 一覧の出力</a>
+            </div>
         </div>
+
+
     </div>
 
     <%
@@ -40,7 +41,7 @@
     %>
 
     <div class="d-inline-block p-3 float-right">
-        <a href="/logout">ログアウト</a>
+       <a href="/logout">ログアウト</a>
     </div>
     <div class="d-inline-block p-3 float-right">
         <%

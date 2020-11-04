@@ -2,6 +2,7 @@ package com.kenon.kenonapp.Controller;
 
 import com.kenon.kenonapp.Helper.EmailHelper;
 import com.kenon.kenonapp.Helper.ExelHelper;
+import com.kenon.kenonapp.Helper.TempChaptureHelper;
 import com.kenon.kenonapp.Model.*;
 import com.kenon.kenonapp.Repository.EmployeeRepository;
 import com.kenon.kenonapp.Repository.PasswordRepository;
@@ -9,6 +10,7 @@ import com.kenon.kenonapp.Repository.TempCaptureIRepo;
 import com.kenon.kenonapp.Repository.TemperatureRepository;
 import com.kenon.kenonapp.Service.ExelService;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -73,39 +75,7 @@ public class AdminController {
         return "jsp/layout";
     }
 
-/// start unnecessary
-/*
-    @GetMapping("/admin/add-user")
-    public String add_user(ModelMap modelMap,HttpServletRequest req, HttpServletResponse rep) throws IOException {
-        isAdmin(req,rep);
-        modelMap.addAttribute("nav","partials/Nav.jsp");
-        modelMap.addAttribute("content","admin/Adduser.jsp");
-        return "jsp/layout";
-    }
 
-    @PostMapping("/admin/user-saved")
-    public RedirectView Usersaved(@ModelAttribute EmployeeModel employeeModel){
-
-        employeeRepository.save(employeeModel);
-        return new RedirectView("/admin/add-user");
-    }
-    @GetMapping("/admin/all-user")
-    public String alluser(ModelMap modelMap,@ModelAttribute EmployeeModel employeeModel,HttpServletRequest req, HttpServletResponse rep) throws IOException {
-        isAdmin(req,rep);
-        modelMap.addAttribute("nav","partials/Nav.jsp");
-        modelMap.addAttribute("content","admin/ShowUser.jsp");
-        modelMap.addAttribute("datas",employeeRepository.findAll());
-        return "jsp/layout";
-    }
-    @GetMapping("/admin/excel-upload")
-    public String ExelUpload(ModelMap modelMap,HttpServletRequest req, HttpServletResponse rep) throws IOException {
-        isAdmin(req,rep);
-        modelMap.addAttribute("nav","partials/Nav.jsp");
-        modelMap.addAttribute("content","admin/Excelform.jsp");
-        return "jsp/layout";
-    }
-*/
-    ///end unnecessary
 
     @Autowired
     ExelService exelService;
@@ -267,15 +237,33 @@ public class AdminController {
     TempCaptureIRepo tempCaptureIRepo;
 
     @PostMapping("/admin/user-temperature")
-    public String CollectTemperature(HttpServletRequest request)throws Exception{
-        String date1 = request.getParameter("date");
-        String date2 =  LocalDate.parse(date1).minusDays(5).toString();
+    public String CollectTemperature(HttpServletRequest request)throws Exception {
+        String date5 = request.getParameter("date");
+        String date1 = LocalDate.parse(date5).minusDays(4).toString();
+        String date2 = LocalDate.parse(date5).minusDays(3).toString();
+        String date3 = LocalDate.parse(date5).minusDays(2).toString();
+        String date4 = LocalDate.parse(date5).minusDays(1).toString();
         String department = request.getParameter("department");
 
-        SimpleDateFormat formatter1=new SimpleDateFormat("yyyy-MM-dd");
-        Date StartData = formatter1.parse(date2);
-        Date EndDate = formatter1.parse(date1);
-        List<EmployeeModel> emp = employeeRepository.findAll();
+        SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
+        Date d1 = formatter1.parse(date1);
+        Date d2 = formatter1.parse(date2);
+        Date d3 = formatter1.parse(date3);
+        Date d4 = formatter1.parse(date4);
+        Date d5 = formatter1.parse(date5);
+        TempChaptureHelper ob = new TempChaptureHelper(d1,d2,d3,d4,d5);
+
+        List<EmployeeModel> emp ;
+        if(department.equals("all")){
+            emp = employeeRepository.findAll();
+
+        }
+        else {
+            emp = employeeRepository.employeeByDepatment(department);
+        }
+
+       // List<EmployeeModel> emp = employeeRepository.findAll();
+
         List<TempCaptureModel> tempCaptureModellist = new ArrayList<TempCaptureModel>();
 
         for (EmployeeModel obj: emp) {
@@ -289,27 +277,48 @@ public class AdminController {
            // System.out.println(" Name: "+obj.getFullName());
            // System.out.print(" Name: "+obj.getFullNameInKata());
            // System.out.print(" Dept.: "+obj.getDepartment());
-            List<TemperatureModel> data = temperatureRepository.TemperatureByDate(obj.getUserId(),StartData,EndDate);
-            int i = 0;
-            for (TemperatureModel temp: data) {
+            List<TemperatureModel> data = temperatureRepository.TemperatureByDate(obj.getUserId(),d1,d5);
 
-//            System.out.print(" Temp.: "+temp.getTemperature());
-//            System.out.print(" Symptoms: "+temp.isSymtoms());
-                if(i==0){ tempCaptureModel.setDay1(temp.getLastUsed().toString()+","+temp.getTemperature()+","+temp.isSymtoms()); }
-                else if(i==1){tempCaptureModel.setDay2(temp.getLastUsed().toString()+","+temp.getTemperature()+","+temp.isSymtoms()); }
-                else if(i==2){tempCaptureModel.setDay3(temp.getLastUsed().toString()+","+temp.getTemperature()+","+temp.isSymtoms()); }
-                else if(i==3){tempCaptureModel.setDay4(temp.getLastUsed().toString()+","+temp.getTemperature()+","+temp.isSymtoms()); }
-                else if(i==4){ tempCaptureModel.setDay5(temp.getLastUsed().toString()+","+temp.getTemperature()+","+temp.isSymtoms());}
-                i++;
+            for (TemperatureModel temp: data) {
+                Timestamp t = temp.getLastUsed();
+                Date d = new Date(t.getTime());
+               // System.out.println(d);
+                if(DateUtils.isSameDay(d1,d))
+                {
+                    String val = (temp.isSymtoms()) ? "有": "無い";
+                    tempCaptureModel.setDay1(temp.getTemperature()+","+ val);
+                }
+                if(DateUtils.isSameDay(d2,d))
+                {
+                    String val = (temp.isSymtoms()) ? "有": "無い";
+                    tempCaptureModel.setDay2(temp.getTemperature()+","+val);
+                }
+                if(DateUtils.isSameDay(d3,d))
+                {
+                    String val = (temp.isSymtoms()) ? "有": "無い";
+                    tempCaptureModel.setDay3(temp.getTemperature()+","+val);
+                }
+                if(DateUtils.isSameDay(d4,d))
+                {
+                    String val = (temp.isSymtoms()) ? "有": "無い";
+                    tempCaptureModel.setDay4(temp.getTemperature()+","+val);
+                }
+                if(DateUtils.isSameDay(d5,d))
+                {
+                    String val = (temp.isSymtoms()) ? "有": "無い";
+                    tempCaptureModel.setDay5(temp.getTemperature()+","+val);
+                }
+
         }
            tempCaptureModellist.add(tempCaptureModel);
            // tempCaptureIRepo.save(tempCaptureModel);
 
         }
 
-      tempCaptureIRepo.saveAll(tempCaptureModellist);
+     tempCaptureIRepo.saveAll(tempCaptureModellist);
 
         return "redirect:/admin/user-temperature";
+      //  return "redirect:/admin";
 
     }
 

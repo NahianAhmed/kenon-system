@@ -29,7 +29,7 @@
 
                        ${department}
 
-
+                           <option value="all"> 全て </option>
 
                     </select>
                 </div>
