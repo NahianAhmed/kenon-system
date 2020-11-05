@@ -18,7 +18,7 @@
                 <div class="pt-3">
                     <h5>出力時間 (選択日を含む過去5日間)</h5>
                 </div>
-                <input type="date" name="date" class="form-control" required>
+                <input type="date" name="date" max="${today}" min="${min}" value="${today}" class="form-control" required>
 
             </div>
 
@@ -26,11 +26,8 @@
                 <div class="pt-3">
                     <h5>出力部門 </h5>
                     <select class="form-control" name="department" required >
-
+                        <option value="all"> 全て </option>
                        ${department}
-
-                           <option value="all"> 全て </option>
-
                     </select>
                 </div>
 

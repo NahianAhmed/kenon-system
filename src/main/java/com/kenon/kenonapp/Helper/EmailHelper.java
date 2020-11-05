@@ -39,7 +39,7 @@ public class EmailHelper {
                         "問い合わせは下記にお願いします。"+"\n\n"+
                         " -本件問い合わせ先-：\n "+
                         "tel    :             026-228-6644  \n"+
-                        "E-mail :        miyazawagkeiken.local \n"+
+                        "E-mail :        miyazawa@keiken.local \n"+
                         "================================================"
         );
         javaMailSender.send(simpleMailMessage);
@@ -83,7 +83,7 @@ public class EmailHelper {
                                  "本メールは送信専用メールです。返信はできません。\n"+
                                  "問い合わせは下記にお願いします。\n\n"+
                                  "tel    :             026-228-6644  \n"+
-                                 "E-mail :        miyazawagkeiken.local \n"+
+                                 "E-mail :        miyazawa@keiken.local \n"+
                          "=============================================================\n"
 
         );

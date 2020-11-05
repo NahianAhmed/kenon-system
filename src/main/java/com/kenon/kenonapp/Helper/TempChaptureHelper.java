@@ -16,13 +16,13 @@ import java.util.List;
 
 public class TempChaptureHelper {
 
-    private static Date d1;
-    private static Date d2;
-    private static Date d3;
-    private static Date d4;
-    private static Date d5;
+    private static String d1;
+    private static String d2;
+    private static String d3;
+    private static String d4;
+    private static String d5;
 
-    public TempChaptureHelper(Date d1,Date d2,Date d3,Date d4,Date d5) {
+    public TempChaptureHelper(String d1,String d2,String d3,String d4,String d5) {
         this.d1=d1;
         this.d2=d2;
         this.d3=d3;
@@ -33,7 +33,7 @@ public class TempChaptureHelper {
 
     public static ByteArrayInputStream ToExcel(List<TempCaptureModel> tempCaptureModels) {
          String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-         String[] HEADERs = {"社員番号", "氏名", "氏名カナ", "部門",d1.toString()," ",d2.toString()," ",d3.toString()," ",d4.toString()," ",d5.toString()," "};
+         String[] HEADERs = {"社員番号", "氏名", "氏名カナ", "部門",d1," ",d2," ",d3," ",d4," ",d5," "};
          String SHEET = "UserTemperature";
 
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {

@@ -192,6 +192,10 @@ public class AdminController {
     public String TemperatureExport(ModelMap modelMap,HttpServletRequest request,HttpServletResponse response) throws IOException {
         isAdmin(request,response);
         List department =  employeeRepository.AllDepartment();
+        String Max = addOrSubtracDate(5);
+        String Min = addOrSubtracDate(-60);
+        String today = addOrSubtracDate(0);
+
 
         String option="";
         for (Object dep : department) {
@@ -205,10 +209,23 @@ public class AdminController {
            // System.out.println(dep);
         }
         //System.out.println(option);
+        modelMap.addAttribute("max",Max);
+        modelMap.addAttribute("min",Min);
+        modelMap.addAttribute("today",today);
         modelMap.addAttribute("department",option);
         modelMap.addAttribute("nav","partials/Nav.jsp");
         modelMap.addAttribute("content","admin/TemperatureExport.jsp");
         return "jsp/layout";
+
+    }
+
+    public String addOrSubtracDate(int i) {
+
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, i);
+        return String.format("%04d-%02d-%02d", (cal.getTime().getYear() + 1900), (cal.getTime().getMonth() + 1),
+                (cal.getTime().getDate()));
 
     }
 
@@ -252,7 +269,10 @@ public class AdminController {
         Date d3 = formatter1.parse(date3);
         Date d4 = formatter1.parse(date4);
         Date d5 = formatter1.parse(date5);
-        TempChaptureHelper ob = new TempChaptureHelper(d1,d2,d3,d4,d5);
+
+
+
+        TempChaptureHelper ob = new TempChaptureHelper(date1,date2,date3,date4,date5);
 
         List<EmployeeModel> emp ;
         if(department.equals("all")){
@@ -334,9 +354,6 @@ public class AdminController {
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                 .body(file);
     }
-
-
-
 
 
 
