@@ -24,7 +24,7 @@
         <h4>パスワード再設定</h4>
     </div>
     <div>
-        ${error}
+        <p style="color: red">${error}</p>
     </div>
     <div class="form-group pt-3">
         <label for="email">メールアドレス</label>

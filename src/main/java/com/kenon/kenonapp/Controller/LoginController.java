@@ -100,15 +100,22 @@ public class LoginController {
     @PostMapping("/sent-token")
     public RedirectView SentTokentoEmail(HttpServletRequest request,RedirectAttributes redirectAttributes){
         String email = request.getParameter("email");
-        System.out.println(email);
+       // System.out.println(email);
         try {
             EmployeeModel employeeModelList = employeeRepository.findUserByEmail(email);
-            PasswordModel passwordModel = new PasswordModel();
-            passwordModel.setUserId(employeeModelList.getUserId());
-            String generatedString = RandomStringUtils.random(32, true, true);
-            passwordModel.setToken(generatedString);
-            passwordRepository.save(passwordModel);
-            emailHelper.SentResetMail(employeeModelList.getUserId(),employeeModelList.getEmail(),generatedString,employeeModelList.getFullName());
+            if(employeeModelList!=null){
+                PasswordModel passwordModel = new PasswordModel();
+                passwordModel.setUserId(employeeModelList.getUserId());
+                String generatedString = RandomStringUtils.random(32, true, true);
+                passwordModel.setToken(generatedString);
+                passwordRepository.save(passwordModel);
+                emailHelper.SentResetMail(employeeModelList.getUserId(),employeeModelList.getEmail(),generatedString,employeeModelList.getFullName());
+            }
+            else{
+                redirectAttributes.addFlashAttribute("error","メールアドレスが無効です.");
+                return new RedirectView("/forget-password");
+            }
+
 
 
         } catch (Exception e) {
