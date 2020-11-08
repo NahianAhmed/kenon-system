@@ -1,5 +1,6 @@
 package com.kenon.kenonapp.Controller;
 
+import com.kenon.kenonapp.Helper.AuthHelper;
 import com.kenon.kenonapp.Helper.EmailHelper;
 import com.kenon.kenonapp.Helper.ExelHelper;
 import com.kenon.kenonapp.Helper.TempChaptureHelper;
@@ -41,10 +42,12 @@ public class AdminController {
     EmployeeRepository employeeRepository;
     @Autowired
     TemperatureRepository temperatureRepository;
+    @Autowired
+    AuthHelper authHelper;
 
     @GetMapping("/admin")
     public String index(ModelMap modelMap, HttpServletRequest req,HttpServletResponse rep,RedirectAttributes attributes) throws IOException {
-        isAdmin(req,rep);
+        authHelper.isAdmin(req,rep);
         if(req.getSession().getAttribute("userID")!=null){
 
         String id =  req.getSession().getAttribute("userID").toString();
@@ -96,7 +99,7 @@ public class AdminController {
     ExelService exelService;
     @GetMapping("/admin/user-download")
     public ResponseEntity<Resource> getFile(HttpServletRequest req, HttpServletResponse rep) throws IOException {
-        isAdmin(req,rep);
+        authHelper.isAdmin(req,rep);
         String filename = "userinfo.xlsx";
         InputStreamResource file = new InputStreamResource(exelService.load());
 
@@ -128,7 +131,7 @@ public class AdminController {
     }
     @GetMapping("/admin/update-password")
     public String AdminUpdatePassword(ModelMap modelMap,HttpServletRequest request,HttpServletResponse response) throws IOException {
-        isAdmin(request,response);
+        authHelper.isAdmin(request,response);
         modelMap.addAttribute("nav","partials/Nav.jsp");
         modelMap.addAttribute("content","admin/admin_updatepassword.jsp");
         return "jsp/layout";
@@ -181,7 +184,7 @@ public class AdminController {
 
     @GetMapping("/admin/user-import-export")
     public String ExcelImportExport(ModelMap modelMap,HttpServletRequest request,HttpServletResponse response) throws IOException {
-        this.isAdmin(request,response);
+        authHelper.isAdmin(request,response);
         modelMap.addAttribute("nav","partials/Nav.jsp");
         modelMap.addAttribute("content","admin/ExcelImportExport.jsp");
         return "jsp/layout";
@@ -190,7 +193,7 @@ public class AdminController {
 
     @GetMapping("/admin/temperature-export")
     public String TemperatureExport(ModelMap modelMap,HttpServletRequest request,HttpServletResponse response) throws IOException {
-        isAdmin(request,response);
+        authHelper.isAdmin(request,response);
         List department =  employeeRepository.AllDepartment();
         String Max = addOrSubtracDate(5);
         String Min = addOrSubtracDate(-60);
@@ -230,16 +233,6 @@ public class AdminController {
     }
 
 
-    public void isAdmin(HttpServletRequest req, HttpServletResponse rep) throws IOException {
-
-        if (req.getSession().getAttribute("user") == null) {
-            rep.sendRedirect("/");
-        } else if ((req.getSession().getAttribute("user").equals("user"))) {
-            rep.sendRedirect("/user");
-        } else if (!(req.getSession().getAttribute("user").equals("admin"))) {
-            rep.sendRedirect("/");
-        }
-    }
     @Autowired
     EmailHelper emailHelper;
     // sec // min // hour // day
@@ -345,7 +338,7 @@ public class AdminController {
 
     @GetMapping("/admin/user-temperature")
     public ResponseEntity<Resource> UserTemp(HttpServletRequest req, HttpServletResponse rep) throws IOException {
-        isAdmin(req,rep);
+        authHelper.isAdmin(req,rep);
         String filename = "user_temperature.xlsx";
         InputStreamResource file = new InputStreamResource(exelService.loadTemp());
 

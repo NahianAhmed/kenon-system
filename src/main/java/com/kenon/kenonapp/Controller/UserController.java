@@ -1,5 +1,6 @@
 package com.kenon.kenonapp.Controller;
 
+import com.kenon.kenonapp.Helper.AuthHelper;
 import com.kenon.kenonapp.Model.PasswordModel;
 import com.kenon.kenonapp.Model.TemperatureModel;
 import com.kenon.kenonapp.Repository.EmployeeRepository;
@@ -29,11 +30,13 @@ public class UserController {
     EmployeeRepository employeeRepository;
      @Autowired
     TemperatureRepository temperatureRepository;
+     @Autowired
+    AuthHelper authHelper;
 
 
     @GetMapping("/user")
     public String index(ModelMap modelMap, HttpServletRequest req,HttpServletResponse rep) throws IOException {
-        isUser(req,rep);
+        authHelper.isUser(req,rep);
         if(req.getSession().getAttribute("userID")!=null){
             String id=  req.getSession().getAttribute("userID").toString();
             String name =  req.getSession().getAttribute("name").toString();
@@ -64,7 +67,7 @@ public class UserController {
 
     @GetMapping("/user/update-password")
     public String AdminUpdatePassword(ModelMap modelMap,HttpServletRequest request,HttpServletResponse response) throws IOException {
-        isUser(request,response);
+        authHelper.isUser(request,response);
         modelMap.addAttribute("nav","partials/Nav.jsp");
         modelMap.addAttribute("content","user/updatepassword.jsp");
         return "jsp/layout";
@@ -126,19 +129,7 @@ public class UserController {
         }
 
 
-    public void isUser(HttpServletRequest req, HttpServletResponse rep) throws IOException {
 
-        if (req.getSession().getAttribute("user") == null) {
-            rep.sendRedirect("/");
-        }
-        else if ((req.getSession().getAttribute("user").equals("admin"))) {
-            rep.sendRedirect("/admin");
-        }
-        else if (!(req.getSession().getAttribute("user").equals("user"))) {
-            rep.sendRedirect("/");
-        }
-
-    }
 
 
 
